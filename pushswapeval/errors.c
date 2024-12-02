@@ -6,20 +6,46 @@
 /*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:29:20 by dsteiger          #+#    #+#             */
-/*   Updated: 2024/11/28 15:09:52 by dsteiger         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:38:56 by dsteiger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	error(int *stack)
+// void	error(t_stack *stack, int flag)
+// {
+// 	if (stack)
+// 	{
+// 		if (stack->a)  // Free stack->a if dynamically allocated
+// 			free(stack->a);
+// 		if (stack->b)  // Free stack->b if dynamically allocated
+// 			free(stack->b);
+// 		if (flag == 1)  // Only free the stack structure if it was dynamically allocated
+// 			free(stack);
+// 	}
+// 	ft_printf("Error\n");
+// 	exit(1);
+// }
+
+void	error(t_stack *stack, int flag)
 {
-	free(stack);
-	ft_printf("Error\n");
-	exit(1);
+	int i;
+
+	i = 0;
+	if (flag == 1)
+	{
+		while (i < stack->size_a)
+		{
+			free(stack->a[i]);
+			i++;
+		}
+		free(stack);
+		ft_printf("Error\n");
+		exit(1);
+	}
 }
 
-int	push_swap_atoi(char *str, int *stack)
+int	push_swap_atoi(char *str, t_stack *stack, int flag)
 {
 	unsigned int		i;
 	int					sign;
@@ -37,13 +63,19 @@ int	push_swap_atoi(char *str, int *stack)
 	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
-			error(stack);
+		{
+			free(str);
+			error(stack, flag);
+		}
 		number = (str[i] - '0') + (number * 10);
 		i++;
 	}
 	if ((number > 2147483648 && sign == -1) || (number > 2147483647
 			&& sign == 1))
-		error(stack);
+	{
+		free(str);
+		error(stack, flag);
+	}
 	return (number * sign);
 }
 
@@ -88,7 +120,7 @@ int	is_sorted(int *stack, int size, int order)
 	}
 }
 
-void	check_doubles(int *stack, int size)
+void	check_doubles(t_stack *stack, int size, int flag)
 {
 	int	i;
 	int	j;
@@ -99,8 +131,8 @@ void	check_doubles(int *stack, int size)
 	{
 		while (j < size)
 		{
-			if (stack[i] == stack[j])
-				error(stack);
+			if (stack->a[i] == stack->a[j])
+				error(stack, flag);
 			j++;
 		}
 		i++;
