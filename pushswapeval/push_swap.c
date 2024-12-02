@@ -6,32 +6,13 @@
 /*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:31:16 by dsteiger          #+#    #+#             */
-/*   Updated: 2024/11/27 19:15:22 by dsteiger         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:37:42 by dsteiger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	print_sorted_stack(t_stack *stack)
-{
-	int	i;
-
-	if (stack->size_a == 0)
-	{
-		printf("Stack A is empty.\n");
-		return ;
-	}
-	printf("Stack A (sorted): ");
-	i = 0;
-	while (i < stack->size_a)
-	{
-		printf("%d ", stack->a[i]);
-		i++;
-	}
-	printf("\n");
-}
-
-void	push_swap(char **av)
+void	push_swap(char **av, int flag)
 {
 	t_stack	stack;
 	int		size;
@@ -51,23 +32,37 @@ void	push_swap(char **av)
 	}
 	stack.size_b = 0;
 	while (++i < size)
-		stack.a[i] = push_swap_atoi(av[i], stack.a);
-	check_doubles(stack.a, size);
+		stack.a[i] = push_swap_atoi(av[i], stack.a, flag);
+	check_doubles(stack.a, size, flag);
 	sort(&stack, size);
-	print_sorted_stack(&stack);
 	free(stack.a);
 	free(stack.b);
 }
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, int flag)
 {
+	char	**split_av;
+	int		i;
+
+	split_av = NULL;
 	if (ac > 1)
 	{
 		av++;
 		if (ac == 2)
-			av = ft_split(*av, ' ');
-		push_swap(av);
-		return (0);
+		{
+			split_av = ft_split(*av, ' ');
+			if (!split_av)
+				return (1);
+			av = split_av;
+		}
+		push_swap(av, flag);
+		if (split_av)
+		{
+			i = 0;
+			while (split_av[i])
+				free(split_av[i++]);
+			free(split_av);
+		}
 	}
 	return (0);
 }
