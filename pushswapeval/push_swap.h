@@ -6,7 +6,7 @@
 /*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:31:39 by dsteiger          #+#    #+#             */
-/*   Updated: 2024/11/28 17:05:00 by dsteiger         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:35:59 by dsteiger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,12 @@ void	reverse_rotate_rr(t_stack *stack);
 void	push_b(t_stack *stack);
 void	push_a(t_stack *stack);
 
-void	error(int *stack);
+void	error(t_stack *stack, int flag);
 int		push_swap_strlen(char **av);
-int		push_swap_atoi(char *str, int *stack);
+int		push_swap_atoi(char *str, t_stack *stack, int flag);
 int		is_sorted(int *stack, int size, int order);
-void	check_doubles(int *stack, int size);
-void	print_sorted_stack(t_stack *stack);
-void	push_swap(char **av);
+void	check_doubles(t_stack *stack, int size, int flag);
+void	push_swap(char **av, int flag);
 
 int		sort(t_stack *stack, int size);
 void	sort_for_median(int *temp_stack, int size);
